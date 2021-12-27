@@ -1,6 +1,6 @@
 package com.atguigu.gmall.realtime.app.ods;
 
-import com.atguigu.gmall.realtime.common.MyCustomDeserial;
+import com.atguigu.gmall.realtime.func.MyCustomDeserial;
 import com.atguigu.gmall.realtime.utils.MyKafkaUtil;
 import com.ververica.cdc.connectors.mysql.MySqlSource;
 import com.ververica.cdc.connectors.mysql.table.StartupOptions;
@@ -35,7 +35,7 @@ public class Flink_CDCWithCustomerSchema_Ods {
                 .databaseList("gmall_flink_210726")
                 .username("root")
                 .password("123456")
-                .startupOptions(StartupOptions.initial())
+                .startupOptions(StartupOptions.latest())
                 .deserializer(new MyCustomDeserial())
                 .build();
 
