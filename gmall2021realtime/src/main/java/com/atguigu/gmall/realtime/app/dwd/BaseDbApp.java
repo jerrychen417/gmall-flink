@@ -78,14 +78,15 @@ public class BaseDbApp {
                 .databaseList("gmall2021_realtime")
                 .tableList("gmall2021_realtime.table_process")
                 .deserializer(new MyCustomDeserial())
-                .startupOptions(StartupOptions.initial())
+                .startupOptions(StartupOptions.latest())
                 .build();
 
         DataStreamSource<String> flinkCDCStream = env.addSource(sourceFunction);
         flinkCDCStream.print("flinkCDCStream----------");
 
         //TODO 5.将配置流转换为广播流
-        MapStateDescriptor<String, TableProcess> mapStateDescriptor = new MapStateDescriptor<>("map-state", String.class, TableProcess.class);
+        MapStateDescriptor<String, TableProcess> mapStateDescriptor =
+                new MapStateDescriptor<>("map-state", String.class, TableProcess.class);
 
         BroadcastStream<String> broadcastStream = flinkCDCStream.broadcast(mapStateDescriptor);
 

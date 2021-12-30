@@ -122,9 +122,7 @@ public class TableProcessFunction extends BroadcastProcessFunction<JSONObject,St
         ReadOnlyBroadcastState<String, TableProcess> broadcastState = ctx.getBroadcastState(mapStateDescriptor);
 
         String key = value.getString("tableName") + "-" + value.getString("type");
-        System.out.println("key>>>>"+key);
         TableProcess tableProcess = broadcastState.get(key);
-        //System.out.println("tableProcess>>>"+tableProcess.toString());
 
         if (tableProcess != null) {
             //2.过滤字段

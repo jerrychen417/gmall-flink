@@ -31,7 +31,7 @@ public class MyCustomDeserial implements DebeziumDeserializationSchema<String> {
         //4.获取类型insert update delete
         Envelope.Operation operation = Envelope.operationFor(sourceRecord);
         String type = operation.toString().toLowerCase();
-        if ("create".equals(type)) {
+        if ("create".equals(type) || "read".equals(type)) {
             type = "insert";
         }
 

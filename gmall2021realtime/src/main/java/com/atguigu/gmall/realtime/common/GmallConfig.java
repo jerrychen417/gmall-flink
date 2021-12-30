@@ -9,4 +9,5 @@ public class GmallConfig {
 
     //Phoenix连接参数
     public static final String PHOENIX_SERVER = "jdbc:phoenix:hadoop102,hadoop103,hadoop104:2181";
+
 }
