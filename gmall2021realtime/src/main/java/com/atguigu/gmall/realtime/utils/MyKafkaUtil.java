@@ -33,4 +33,14 @@ public class MyKafkaUtil {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         return new FlinkKafkaConsumer<String>(topic, new SimpleStringSchema(), properties);
     }
+
+    //拼接Kafka相关属性到DDL
+    public static String getKafkaDDL(String topic, String groupId) {
+        return "'connector' = 'kafka', " +
+                " 'topic' = '" + topic + "'," +
+                " 'properties.bootstrap.servers' = '" + KAFKA_SERVER + "', " +
+                " 'properties.group.id' = '" + groupId + "', " +
+                "  'format' = 'json', " +
+                "  'scan.startup.mode' = 'latest-offset'";
+    }
 }
