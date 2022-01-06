@@ -37,7 +37,7 @@ public class UniqueVisitApp {
 //        System.setProperty("HADOOP_USER_NAME", "atguigu");
 
         //todo 2.读取kafka dwd_page_log
-        String groupId = "unique_visit_app_210726";
+        String groupId = "unique_visit_app_2107";
         String sourceTopic = "dwd_page_log";
         String sinkTopic = "dwm_unique_visit";
         DataStreamSource<String> kafkaDS = env.addSource(MyKafkaUtil.getKafkaSource(sourceTopic, groupId));

@@ -45,7 +45,7 @@ public class BaseDbApp {
 
         //TODO 2.读取Kafka主题数据创建流
         String topic = "ods_base_db";
-        String groupId = "base_db_app_210726";
+        String groupId = "base_db_app_2107";
         DataStreamSource<String> kafkaStream = env.addSource(MyKafkaUtil.getKafkaSource(topic, groupId));
 
         //TODO 3.将数据转换为JSON格式，过滤掉删除数据
@@ -78,11 +78,10 @@ public class BaseDbApp {
                 .databaseList("gmall2021_realtime")
                 .tableList("gmall2021_realtime.table_process")
                 .deserializer(new MyCustomDeserial())
-                .startupOptions(StartupOptions.latest())
+                .startupOptions(StartupOptions.initial())
                 .build();
 
         DataStreamSource<String> flinkCDCStream = env.addSource(sourceFunction);
-        flinkCDCStream.print("flinkCDCStream----------");
 
         //TODO 5.将配置流转换为广播流
         MapStateDescriptor<String, TableProcess> mapStateDescriptor =

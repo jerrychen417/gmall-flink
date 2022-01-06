@@ -48,7 +48,7 @@ public class VisitorStatsApp {
 //        System.setProperty("HADOOP_USER_NAME", "atguigu");
 
         //todo 2.读取Kafka数据
-        String groupId = "visitor_stats_app_210726";
+        String groupId = "visitor_stats_app_2107";
         String pageViewSourceTopic = "dwd_page_log";
         String uniqueVisitSourceTopic = "dwm_unique_visit";
         String userJumpDetailSourceTopic = "dwm_user_jump_detail";

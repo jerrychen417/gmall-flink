@@ -38,7 +38,7 @@ public class PaymentWideApp {
 //        System.setProperty("HADOOP_USER_NAME", "atguigu");
 
         //todo 2.读取Kafka支付表以及订单宽表数据
-        String groupId = "payment_wide_group";
+        String groupId = "payment_wide_group_21";
         String paymentInfoSourceTopic = "dwd_payment_info";
         String orderWideSourceTopic = "dwm_order_wide";
         String paymentWideSinkTopic = "dwm_payment_wide";
@@ -96,7 +96,7 @@ public class PaymentWideApp {
 
         //todo 6.将数据写入Kafka
         payMentWideDS.print(">>>>>>>>>>>>>>>>");
-        paymentInfoDS
+        payMentWideDS
                 .map(paymentInfo -> JSON.toJSONString(paymentInfo))
                 .addSink(MyKafkaUtil.getKafkaSink(paymentWideSinkTopic));
 

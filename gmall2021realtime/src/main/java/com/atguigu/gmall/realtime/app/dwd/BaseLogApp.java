@@ -40,7 +40,7 @@ public class BaseLogApp {
 //        System.setProperty("HADOOP_USER_NAME", "atguigu");
 
         //todo 2.消费kafka主题数据创建流
-        DataStreamSource<String> kafkaStream = env.addSource(MyKafkaUtil.getKafkaSource("ods_base_log", "base_log_app_210726"));
+        DataStreamSource<String> kafkaStream = env.addSource(MyKafkaUtil.getKafkaSource("ods_base_log", "base_log_app_2107"));
 
         //todo 3.转换为JSONObject对象并过滤数据
         OutputTag<String> outputTag = new OutputTag<String>("DirtyData") {
@@ -98,7 +98,7 @@ public class BaseLogApp {
         //todo 5.分流  侧输出流    页面日志  主流  启动日志&曝光日志  侧输出流
         OutputTag<String> startTag = new OutputTag<String>("start") {
         };
-        OutputTag<String> displayTag = new OutputTag<String>("display") {
+        OutputTag<String> displayTag = new OutputTag<String>("Display") {
         };
         SingleOutputStreamOperator<String> pageStream = jsonObjWithNewFlagStream.process(new ProcessFunction<JSONObject, String>() {
             @Override
@@ -137,9 +137,9 @@ public class BaseLogApp {
         DataStream<String> startStream = pageStream.getSideOutput(startTag);
         DataStream<String> displayStream = pageStream.getSideOutput(displayTag);
 
-        pageStream.print();
-        startStream.print();
-        displayStream.print();
+        pageStream.print("Page>>>>>>>>");
+        startStream.print("Start>>>>>>>>");
+        displayStream.print("Display>>>>>>>>");
 
         pageStream.addSink(MyKafkaUtil.getKafkaSink("dwd_page_log"));
         startStream.addSink(MyKafkaUtil.getKafkaSink("dwd_start_log"));

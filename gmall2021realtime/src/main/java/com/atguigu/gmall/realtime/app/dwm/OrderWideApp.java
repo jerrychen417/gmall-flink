@@ -9,6 +9,7 @@ import com.atguigu.gmall.realtime.func.DimAsyncFunction;
 import com.atguigu.gmall.realtime.utils.MyKafkaUtil;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.streaming.api.datastream.AsyncDataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -45,8 +46,8 @@ public class OrderWideApp {
         //todo 2.消费Kafka订单和订单明细主题的数据
         String orderInfoSourceTopic = "dwd_order_info";
         String orderDetailSourceTopic = "dwd_order_detail";
-        String orderWideSinkTopic = "dwd_order_wide";
-        String groupId = "order_wide_group_210726";
+        String orderWideSinkTopic = "dwm_order_wide";
+        String groupId = "order_wide_group_2107";
 
         DataStreamSource<String> orderInfoStrDS = env.addSource(MyKafkaUtil.getKafkaSource(orderInfoSourceTopic, groupId));
 
@@ -104,8 +105,6 @@ public class OrderWideApp {
                     }
                 });
 
-        orderWideDS.print("OrderWide>>>>>>");
-
         //todo 5.关联纬度信息
         //todo 5.1关联用户纬度
         SingleOutputStreamOperator<OrderWide> orderWideWithUserDS = AsyncDataStream.unorderedWait(orderWideDS,
@@ -129,8 +128,6 @@ public class OrderWideApp {
 
                     }
                 }, 100, TimeUnit.SECONDS);
-
-        orderWideWithUserDS.print("orderWideWithUserDS>>>>>>>");
 
         //todo 5.2关联地区纬度
         SingleOutputStreamOperator<OrderWide> orderWideWithProvinceDS = AsyncDataStream.unorderedWait(orderWideWithUserDS,
@@ -213,9 +210,16 @@ public class OrderWideApp {
         //todo 6.将数据写入Kafka
         orderWideWithCategory3DS.print("orderWideWithCategory3DS>>>>>>>");
 
-        orderWideWithCategory3DS
-                .map(bean -> JSON.toJSONString(bean))
-                .addSink(MyKafkaUtil.getKafkaSink(orderWideSinkTopic));
+        SingleOutputStreamOperator<String> map = orderWideWithCategory3DS
+                .map(new MapFunction<OrderWide, String>() {
+                    @Override
+                    public String map(OrderWide value) throws Exception {
+                        return JSONObject.toJSONString(value);
+                    }
+                });
+
+        map.print("map----------------------");
+        map.addSink(MyKafkaUtil.getKafkaSink(orderWideSinkTopic));
 
         //todo 7.启动任务
         env.execute("OrderWideApp");

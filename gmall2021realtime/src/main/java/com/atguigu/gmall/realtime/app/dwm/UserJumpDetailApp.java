@@ -46,7 +46,7 @@ public class UserJumpDetailApp {
 
         //todo 2.读取kafka dwd_page_log主题数据
         String sourceTopic = "dwd_page_log";
-        String groupId = "user_jump_detail_app_210726";
+        String groupId = "user_jump_detail_app_2107";
         String sinkTopic = "dwm_user_jump_detail";
         DataStreamSource<String> kafkaDS = env.addSource(MyKafkaUtil.getKafkaSource(sourceTopic, groupId));
 
